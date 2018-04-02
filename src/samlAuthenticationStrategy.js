@@ -8,6 +8,7 @@ const idpCert = fs.readFileSync(path.resolve(process.cwd(), config.idpCert), 'ut
 
 module.exports = new SamlStrategy({
   path: '/login/callback',
+  host: config.host,
   entryPoint: config.entryPointUrl,
   issuer: config.issuer,
   decryptionPvk: privateKey,

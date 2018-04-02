@@ -7,6 +7,7 @@ module.exports = {
   sessionSecret: process.env.SESSION_SECRET || 'secret',
 
   // SAML Settings
+  host: 'auth.uingame.co.il',
   successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
   callbackUrl: process.env.CALLBACK_URL || 'http://auth.uingame.co.il/login/callback',
   entryPointUrl: process.env.ENTRY_POINT_URL || 'https://is.remote.education.gov.il/nidp/saml2/sso',
