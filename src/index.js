@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const passport = require('passport')
 const samlStrategy = require('./samlAuthenticationStrategy')
 const app = require('./express')
@@ -37,7 +38,7 @@ app.get('/login/fail',
 
 app.get('/saml/metadata',
   (req, res, next) => {
-    fs.readFile(config.certificate, 'utf8', (err, cert) => {
+    fs.readFile(path.resolve(process.cwd(), config.certificate), 'utf8', (err, cert) => {
       if (err) {
         next(err)
       } else {
