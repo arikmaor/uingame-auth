@@ -8,10 +8,10 @@ module.exports = {
 
   // SAML Settings
   successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
-  callbackUrl: process.env.CALLBACK_URL || 'http://0f0c4b78.ngrok.io/login/callback',
-  entryPointUrl: process.env.ENTRY_POINT_URL || 'https://arik-test.auth0.com/samlp/yAEEHo1IC1xz0rQkyKfLQMQZoNsbuf6q',
-  issuer: process.env.ISSUER || 'urn:arik-test.auth0.com',
+  callbackUrl: process.env.CALLBACK_URL || 'http://auth.uingame.co.il/login/callback',
+  entryPointUrl: process.env.ENTRY_POINT_URL || 'https://is.remote.education.gov.il/nidp/saml2/sso',
+  issuer: process.env.ISSUER || 'https://is.remote.education.gov.il/nidp/saml2/metadata',
   privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',
   certificate: process.env.CERTIFICATE || 'certs/cert.pem',
-  idpCert: process.env.IDP_CERT || 'certs/auth0.pem'
+  idpCert: process.env.IDP_CERT || 'certs/idp.pem'
 }
