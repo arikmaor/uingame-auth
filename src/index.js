@@ -23,11 +23,11 @@ app.use((req, res, next) => {
 })
 
 app.get('/login',
-  passport.authenticate('saml', { successRedirect: '/', failureRedirect: '/login/fail', failureFlash: true })
+  passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
 )
 
 app.post('/login/callback',
-  passport.authenticate('saml', { successRedirect: 'https://www.uingame.co.il/scratch-students', failureRedirect: '/login/fail', failureFlash: true })
+  passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
 )
 
 app.get('/login/fail',
