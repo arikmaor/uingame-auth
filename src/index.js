@@ -7,40 +7,26 @@ const config = require('./config')
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.use(samlStrategy)
 app.use(passport.initialize())
-app.use(passport.session())
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated())
-    return next()
-  else
-    return res.redirect('/login')
+if (config.enableSession) {
+  app.use(passport.session())
 }
 
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.protocol}://${req.hostname}${req.path}`)
+  console.log(`${new Date().toISOString()} [${req.connection.remoteAddress}] - ${req.method} ${req.protocol}://${req.hostname}${req.path}`)
   next()
 })
-
-app.get('/',
-  ensureAuthenticated,
-  (req, res) => {
-    res.send('Authenticated')
-  }
-)
 
 app.get('/login',
   passport.authenticate('saml', { successRedirect: '/', failureRedirect: '/login/fail', failureFlash: true })
 )
 
 app.post('/login/callback',
-  passport.authenticate('saml', { successRedirect: '/', failureRedirect: '/login/fail', failureFlash: true })
+  passport.authenticate('saml', { successRedirect: 'https://www.uingame.co.il/scratch-students', failureRedirect: '/login/fail', failureFlash: true })
 )
 
 app.get('/login/fail',
@@ -50,9 +36,15 @@ app.get('/login/fail',
 )
 
 app.get('/saml/metadata',
-  (req, res) => {
-    res.type('application/xml')
-    res.status(200).send(samlStrategy.generateServiceProviderMetadata(fs.readFileSync(__dirname + '/cert/cert.pem', 'utf8')))
+  (req, res, next) => {
+    fs.readFile(config.certificate, 'utf8', (err, cert) => {
+      if (err) {
+        next(err)
+      } else {
+        res.type('application/xml')
+        res.status(200).send(samlStrategy.generateServiceProviderMetadata(cert))
+      }
+    })
   }
 )
 
