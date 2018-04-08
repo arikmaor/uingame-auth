@@ -1,13 +1,16 @@
 # UINGame Authenication Server
 
+SAML 2.0 Service Provider
+Authenticates with [education.gov.ip Identity Provider](https://is.remote.education.gov.il/nidp/saml2/metadata)
+
 ## Local Setup
 1. Install the following tools:
-  1. git
-  2. nodejs
-  3. yarn
-  4. heroku (to upload to production)
-  5. nodemon (for auto-restart during development)
-  6. openssl (for generating self-signed certificates)
+    1. git
+    2. nodejs
+    3. yarn
+    4. heroku (to upload to production)
+    5. nodemon (for auto-restart during development)
+    6. openssl (for generating self-signed certificates)
 2. Clone this repo
 3. Run `yarn` to install dependencies
 4. Run `yarn start` or `yarn dev` to start the server
