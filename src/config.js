@@ -14,5 +14,9 @@ module.exports = {
   issuer: process.env.ISSUER || 'http://auth.uingame.co.il',
   privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',
   certificate: process.env.CERTIFICATE || 'certs/cert.pem',
-  idpCert: process.env.IDP_CERT || 'certs/idp.pem'
+  idpCert: process.env.IDP_CERT || 'certs/idp.pem',
+
+  // For Getting an SSL Certificate
+  sslCertificateAcmeChallengeUrl: process.env.ACME_CHALLENGE_URL,
+  sslCertificateAcmeChallengeString: process.env.ACME_CHALLENGE_STRING
 }

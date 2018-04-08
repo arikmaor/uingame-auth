@@ -49,6 +49,12 @@ app.get('/saml/metadata',
   }
 )
 
+if (config.sslCertificateAcmeChallengeString && config.sslCertificateAcmeChallengeUrl) {
+  app.get(`/${config.sslCertificateAcmeChallengeUrl}`, (req, res, next) => {
+    res.send(config.sslCertificateAcmeChallengeString)
+  })
+}
+
 //general error handler
 app.use(function(err, req, res, next) {
   console.log("Fatal error: " + JSON.stringify(err))
