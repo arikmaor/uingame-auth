@@ -8,8 +8,8 @@ module.exports = {
 
   // SAML Settings
   host: 'auth.uingame.co.il',
+  useSSL: process.env.USE_SSL || true,
   successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
-  callbackUrl: process.env.CALLBACK_URL || 'http://auth.uingame.co.il/login/callback',
   entryPointUrl: process.env.ENTRY_POINT_URL || 'https://is.remote.education.gov.il/nidp/saml2/sso',
   issuer: process.env.ISSUER || 'http://auth.uingame.co.il',
   privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',

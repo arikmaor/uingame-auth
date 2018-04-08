@@ -9,6 +9,7 @@ const idpCert = fs.readFileSync(path.resolve(process.cwd(), config.idpCert), 'ut
 module.exports = new SamlStrategy({
   path: '/login/callback',
   identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+  protocol: config.useSSL && 'https://',
   host: config.host,
   entryPoint: config.entryPointUrl,
   issuer: config.issuer,
