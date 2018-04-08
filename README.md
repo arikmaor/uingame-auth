@@ -15,7 +15,7 @@
 ## Scripts
 1. `yarn start` - Starts the authentication server.
 2. `yarn dev` - Starts the authentication server with `nodemon`.
-3. `yarn deploy` - Deploys to heroku, including the `cert` folder not included in the repository.
+3. `yarn deploy` - Deploys to heroku, including the `certs` folder not included in the repository.
 
 ## Generating a self-signed certificate
 in order to generate a self-signed certificate (suitable for debugging) run this:
