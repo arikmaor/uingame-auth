@@ -19,5 +19,6 @@ module.exports = new SamlStrategy({
   validateInResponseTo: false,
   disableRequestedAuthnContext: true
 }, (profile, done) => {
+  console.log(`Logged in: ${JSON.stringify(profile, ' ', 2)}`)
   return done(null, profile)
 })
