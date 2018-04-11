@@ -23,6 +23,13 @@ app.use((req, res, next) => {
 })
 
 app.get('/login',
+  (req, res, next) => {
+    if (req.isAuthenticated()) {
+      res.redirect(config.successRedirect)
+    } else {
+      next()
+    }
+  },
   passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
 )
 
@@ -33,6 +40,19 @@ app.post('/login/callback',
 app.get('/login/fail',
   (req, res) => {
     res.status(401).send('Login failed')
+  }
+)
+
+app.get('/logout',
+  (req, res) => {
+    samlStrategy.logout(req, (err, requestUrl) => {
+      if (err) {
+        next(err)
+      } else {
+        req.logout()
+        res.redirect(requestUrl)
+      }
+    })
   }
 )
 
