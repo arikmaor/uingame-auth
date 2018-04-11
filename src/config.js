@@ -3,7 +3,7 @@ module.exports = {
   port: process.env.PORT || 8080,
 
   // Session settings
-  enableSession: false,
+  enableSession: true,
   sessionSecret: process.env.SESSION_SECRET || 'secret',
 
   // SAML Settings
@@ -15,6 +15,13 @@ module.exports = {
   privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',
   certificate: process.env.CERTIFICATE || 'certs/cert.pem',
   idpCert: process.env.IDP_CERT || 'certs/idp.pem',
+
+  // Test Settings
+  // host: '79600464.ngrok.io',
+  // useSSL: process.env.USE_SSL || false,
+  // entryPointUrl: process.env.ENTRY_POINT_URL || 'https://arik-test.auth0.com/samlp/yAEEHo1IC1xz0rQkyKfLQMQZoNsbuf6q',
+  // issuer: process.env.ISSUER || 'urn:arik-test.auth0.com',
+  // idpCert: process.env.IDP_CERT || 'certs/auth0.pem',
 
   // For Getting an SSL Certificate
   sslCertificateAcmeChallengeUrl: process.env.ACME_CHALLENGE_URL,
