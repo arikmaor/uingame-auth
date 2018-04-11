@@ -33,6 +33,16 @@ app.get('/login',
   passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
 )
 
+app.get('/test',
+  (req, res, next) => {
+    if (req.isAuthenticated()) {
+      res.send(req.user)
+    } else {
+      res.send("Not Authenticated")
+    }
+  }
+)
+
 app.post('/login/callback',
   passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
 )
