@@ -23,7 +23,8 @@ module.exports = new SamlStrategy({
     displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
     id: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut'],
     mosad: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolesyeshuyot'],
-    isStudent: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/isstudent'] === 'Yes'
+    isStudent: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/isstudent'] === 'Yes',
+    kita: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/studentkita']
   }
   console.log(`Logged in: ${JSON.stringify(user, ' ', 2)}`)
   return done(null, user)
