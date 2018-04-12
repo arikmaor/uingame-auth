@@ -1,9 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const querystring = require('query-string')
+const randtoken = require('rand-token')
 const passport = require('passport')
 const samlStrategy = require('./samlAuthenticationStrategy')
 const app = require('./express')
+const redis = require('./redis')
 const config = require('./config')
 
 passport.serializeUser(function(user, done) {
@@ -33,31 +35,48 @@ app.get('/test',
   }
 )
 
-app.get('/login',
-  (req, res, next) => {
-    if (req.isAuthenticated()) {
-      console.log(`Already logged in: ${JSON.stringify(req.user, ' ', 2)}`)
-      res.redirect(`${config.successRedirect}?${querystring.stringify(req.user)}`)
-    } else {
-      next()
-    }
-  },
-  passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }),
-  redirectToWebsite
-)
+app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }))
 
 app.post('/login/callback',
   passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }),
-  redirectToWebsite
+  async (req, res, next) => {
+    if (req.isAuthenticated()) {
+      const token = randtoken.generate(16);
+      const keyName = `TOKEN:${token}`
+      try {
+        await redis.set(keyName, JSON.stringify(req.user))
+        await redis.expire(keyName, config.tokenExpiration)
+        res.redirect(`${config.successRedirect}?${querystring.stringify({token})}`)
+      } catch (err) {
+        console.error(`Error while saving in redis: ${err}`)
+        res.redirect('/login/fail')
+      }
+    } else {
+      res.redirect('/login/fail')
+    }
+  }
 )
 
-function redirectToWebsite(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.redirect(`${config.successRedirect}?${querystring.stringify(req.user)}`)
-  } else {
-    req.redirect('/login/fail')
+app.get('/login/verify',
+  async (req, res, next) => {
+    const {token} = req.query
+    if (!token) {
+      return res.status(400).send('Bad Request')
+    }
+    const keyName = `TOKEN:${token}`
+    try {
+      const user = JSON.parse(await redis.get(keyName))
+      if (!user) {
+        return res.status(404).send('Not Found')
+      } else {
+        res.send(user);
+      }
+    } catch (err) {
+      console.error(`Error while getting from redis: ${err}`)
+      res.status(500).send('Internal Server Error')
+    }
   }
-}
+)
 
 app.get('/login/fail',
   (req, res) => {
