@@ -15,7 +15,6 @@ if (config.enableSession) {
     secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false
-
   }))
 }
 

@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 app.get('/login',
   (req, res, next) => {
     if (req.isAuthenticated()) {
+      console.log(`Already logged in: ${JSON.stringify(req.user, ' ', 2)}`)
       res.redirect(config.successRedirect)
     } else {
       next()
@@ -55,7 +56,12 @@ app.get('/login/fail',
 
 app.get('/logout',
   (req, res) => {
-    req.logout()
+    if (req.isAuthenticated()) {
+      console.log(`Logged out: ${JSON.stringify(req.user, ' ', 2)}`)
+      req.logout()
+    } else {
+      console.log('Not Authenticated')
+    }
     res.redirect(`${config.logoutUrl}?logoutURL=${config.logoutRedirectUrl}`)
   }
 )
