@@ -10,6 +10,8 @@ client.on("error", function (err) {
   console.error("Error in redis client: " + err)
 });
 
+client.auth(redisUrl.auth.split(":")[1]);
+
 const COMMANDS = ['set', 'get', 'expire']
 
 module.exports = COMMANDS.reduce((ret, cmd) => {
