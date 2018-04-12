@@ -55,14 +55,8 @@ app.get('/login/fail',
 
 app.get('/logout',
   (req, res) => {
-    samlStrategy.logout(req, (err, requestUrl) => {
-      if (err) {
-        next(err)
-      } else {
-        req.logout()
-        res.redirect(requestUrl)
-      }
-    })
+    req.logout()
+    res.redirect(`${config.logoutUrl}?logoutURL=${config.logoutRedirectUrl}`)
   }
 )
 
