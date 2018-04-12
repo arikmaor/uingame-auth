@@ -37,7 +37,7 @@ app.get('/login',
   (req, res, next) => {
     if (req.isAuthenticated()) {
       console.log(`Already logged in: ${JSON.stringify(req.user, ' ', 2)}`)
-      res.redirect(config.successRedirect)
+      res.redirect(`${config.successRedirect}?${querystring.stringify(req.user)}`)
     } else {
       next()
     }
