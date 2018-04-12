@@ -10,7 +10,9 @@ client.on("error", function (err) {
   console.error("Error in redis client: " + err)
 });
 
-client.auth(redisUrl.auth.split(":")[1]);
+if (redisUrl.auth) {
+  client.auth(redisUrl.auth.split(":")[1]);
+}
 
 const COMMANDS = ['set', 'get', 'expire']
 

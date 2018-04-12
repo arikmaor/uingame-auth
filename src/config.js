@@ -3,6 +3,7 @@ module.exports = {
   port: process.env.PORT || 8080,
   redisUrl: process.env.REDISTOGO_URL || '127.0.0.1',
   tokenExpiration: process.env.TOKEN_EXPIRATION || 300, // 5 minutes
+  corsOrigin: process.env.CORS_ORIGIN || 'www.uingame.co.il',
 
   // Session settings
   enableSession: true,

@@ -3,6 +3,7 @@ const path = require('path')
 const querystring = require('query-string')
 const randtoken = require('rand-token')
 const passport = require('passport')
+const cors = require('cors')
 const samlStrategy = require('./samlAuthenticationStrategy')
 const app = require('./express')
 const redis = require('./redis')
@@ -58,6 +59,9 @@ app.post('/login/callback',
 )
 
 app.get('/login/verify',
+  cors({
+    origin: config.corsOrigin
+  }),
   async (req, res, next) => {
     const {token} = req.query
     if (!token) {
