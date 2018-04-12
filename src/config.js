@@ -1,7 +1,7 @@
 module.exports = {
   // Common Settings
   port: process.env.PORT || 8080,
-  redisUrl: process.env.REDIS_URL || '127.0.0.1',
+  redisUrl: process.env.REDISTOGO_URL || '127.0.0.1',
   tokenExpiration: process.env.TOKEN_EXPIRATION || 300, // 5 minutes
 
   // Session settings

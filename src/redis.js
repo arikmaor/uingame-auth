@@ -1,10 +1,10 @@
 const {promisify} = require('util')
+const Url = require("url")
 const redis = require('redis')
 const config = require('./config')
 
-const client = redis.createClient({
-  host: config.redisUrl
-})
+var redisUrl = Url.parse(config.redisUrl);
+const client = redis.createClient(redisUrl.port, redisUrl.hostname)
 
 client.on("error", function (err) {
   console.error("Error is redis client: " + err)
