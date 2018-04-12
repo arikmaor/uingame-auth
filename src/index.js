@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const querystring = require('query-string')
 const passport = require('passport')
 const samlStrategy = require('./samlAuthenticationStrategy')
 const app = require('./express')
@@ -41,12 +42,22 @@ app.get('/login',
       next()
     }
   },
-  passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
+  passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }),
+  redirectToWebsite
 )
 
 app.post('/login/callback',
-  passport.authenticate('saml', { successRedirect: config.successRedirect, failureRedirect: '/login/fail', failureFlash: true })
+  passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }),
+  redirectToWebsite
 )
+
+function redirectToWebsite(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.redirect(`${config.successRedirect}?${querystring.stringify(req.user)}`)
+  } else {
+    req.redirect('/login/fail')
+  }
+}
 
 app.get('/login/fail',
   (req, res) => {
