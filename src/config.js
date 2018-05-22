@@ -9,17 +9,18 @@ module.exports = {
   enableSession: true,
   sessionSecret: process.env.SESSION_SECRET || 'secret',
 
+  // Auth Redirection
+  successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
+  logoutRedirectUrl: process.env.LOGOUT_REDIRECT || 'https://www.uingame.co.il',
+
   // SAML Settings
   host: 'auth.uingame.co.il',
   useSSL: process.env.USE_SSL || true,
-  successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
-  entryPointUrl: process.env.ENTRY_POINT_URL || 'https://is.remote.education.gov.il/nidp/saml2/sso',
+  idpMetadataUrl: process.env.IDP_METADATA_URL || 'https://is.remote.education.gov.il/nidp/saml2/metadata',
   logoutUrl: process.env.LOGOUT_URL || 'https://is.remote.education.gov.il/nidp/jsp/logoutSuccess.jsp',
-  logoutRedirectUrl: process.env.LOGOUT_REDIRECT || 'https://www.uingame.co.il',
   issuer: process.env.ISSUER || 'http://auth.uingame.co.il',
   privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',
   certificate: process.env.CERTIFICATE || 'certs/cert.pem',
-  idpCert: process.env.IDP_CERT || 'certs/idp.pem',
 
   // Test Settings
   // host: '79600464.ngrok.io',
