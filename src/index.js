@@ -98,9 +98,9 @@ async function init() {
     }
   )
 
-  if (config.sslCertificateAcmeChallengeString && config.sslCertificateAcmeChallengeUrl) {
-    app.get(`/${config.sslCertificateAcmeChallengeUrl}`, (req, res, next) => {
-      res.send(config.sslCertificateAcmeChallengeString)
+  if (config.acmeChallengeValue && config.acmeChallengeToken) {
+    app.get(`/.well-known/acme-challenge/${config.acmeChallengeToken}`, (req, res, next) => {
+      res.send(config.acmeChallengeValue)
     })
   }
 

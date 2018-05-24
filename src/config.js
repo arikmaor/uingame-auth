@@ -18,6 +18,6 @@ module.exports = {
   certificate: process.env.SAML_CERT,
 
   // For Getting an SSL Certificate
-  sslCertificateAcmeChallengeUrl: process.env.ACME_CHALLENGE_URL,
-  sslCertificateAcmeChallengeString: process.env.ACME_CHALLENGE_STRING
+  acmeChallengeToken: process.env.ACME_CHALLENGE_TOKEN,
+  acmeChallengeValue: process.env.ACME_CHALLENGE_VALUE
 }
