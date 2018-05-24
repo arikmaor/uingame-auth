@@ -1,13 +1,14 @@
-const fs = require('fs')
-const path = require('path')
+const express = require('express')
+const bodyParser = require('body-parser')
 const querystring = require('query-string')
 const randtoken = require('rand-token')
 const passport = require('passport')
 const cors = require('cors')
+
 const createSamlStartegy = require('./samlAuthenticationStrategy')
-const app = require('./express')
 const redis = require('./redis')
 const config = require('./config')
+
 
 init().catch(err => {
   console.error('FATAL ERROR!')
@@ -15,6 +16,9 @@ init().catch(err => {
 })
 
 async function init() {
+  const app = express()
+  app.use(bodyParser.urlencoded({extended: true}))
+
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
@@ -24,24 +28,11 @@ async function init() {
   const samlStrategy = await createSamlStartegy()
   passport.use(samlStrategy)
   app.use(passport.initialize())
-  if (config.enableSession) {
-    app.use(passport.session())
-  }
 
   app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} [${req.connection.remoteAddress}] - ${req.method} ${req.protocol}://${req.hostname}${req.path}`)
     next()
   })
-
-  app.get('/test',
-    (req, res, next) => {
-      if (req.isAuthenticated()) {
-        res.send(req.user)
-      } else {
-        res.send("Not Authenticated")
-      }
-    }
-  )
 
   app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }))
 
@@ -97,12 +88,6 @@ async function init() {
 
   app.get('/logout',
     (req, res) => {
-      if (req.isAuthenticated()) {
-        console.log(`Logged out: ${JSON.stringify(req.user, ' ', 2)}`)
-        req.logout()
-      } else {
-        console.log('Not Authenticated')
-      }
       res.redirect(`${config.logoutUrl}?logoutURL=${config.logoutRedirectUrl}`)
     }
   )

@@ -5,10 +5,6 @@ module.exports = {
   tokenExpiration: process.env.TOKEN_EXPIRATION || 300, // 5 minutes
   corsOrigin: process.env.CORS_ORIGIN || 'https://www.uingame.co.il',
 
-  // Session settings
-  enableSession: false,
-  sessionSecret: process.env.SESSION_SECRET || 'secret',
-
   // Auth Redirection
   successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
   logoutRedirectUrl: process.env.LOGOUT_REDIRECT || 'https://www.uingame.co.il',
