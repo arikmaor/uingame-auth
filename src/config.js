@@ -11,9 +11,9 @@ module.exports = {
 
   // SAML Settings
   host: 'auth.uingame.co.il',
-  idpMetadataUrl: process.env.IDP_METADATA_URL || 'https://is.remote.education.gov.il/nidp/saml2/metadata',
-  logoutUrl: process.env.LOGOUT_URL || 'https://is.remote.education.gov.il/nidp/jsp/logoutSuccess.jsp',
-  issuer: process.env.ISSUER || 'http://auth.uingame.co.il',
+  idpMetadataUrl: process.env.IDP_METADATA_URL || 'https://lgn.edu.gov.il/nidp/saml2/metadata',
+  logoutUrl: process.env.LOGOUT_URL || 'https://lgn.edu.gov.il/nidp/jsp/logoutSuccess.jsp',
+  issuer: 'http://auth.uingame.co.il',
   privateKey: process.env.SAML_PRIVATE_KEY,
   certificate: process.env.SAML_CERT,
 
