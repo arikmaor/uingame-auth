@@ -13,7 +13,7 @@ async function createSamlStartegy() {
   return new SamlStrategy({
     path: '/login/callback',
     identifierFormat: 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-    protocol: config.useSSL && 'https://',
+    protocol: 'https://',
     host: config.host,
     entryPoint: metadata.idpSsoTargetUrl,
     issuer: config.issuer,
