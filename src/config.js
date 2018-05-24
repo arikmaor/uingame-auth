@@ -6,7 +6,7 @@ module.exports = {
   corsOrigin: process.env.CORS_ORIGIN || 'https://www.uingame.co.il',
 
   // Session settings
-  enableSession: true,
+  enableSession: false,
   sessionSecret: process.env.SESSION_SECRET || 'secret',
 
   // Auth Redirection
