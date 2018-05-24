@@ -29,11 +29,6 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} [${req.connection.remoteAddress}] - ${req.method} ${req.protocol}://${req.hostname}${req.path}`)
-    next()
-  })
-
   app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }))
 
   app.post('/login/callback',
