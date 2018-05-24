@@ -5,7 +5,7 @@ const SamlStrategy = require('passport-saml').Strategy
 const {parse: parseSamlMetadata} = require('idp-metadata-parser')
 const config = require('./config')
 
-const privateKey = fs.readFileSync(path.resolve(process.cwd(), config.privateKey), 'utf8')
+const privateKey = config.privateKey || fs.readFileSync(path.resolve(process.cwd(), config.privateKeyFile), 'utf8')
 
 async function createSamlStartegy() {
   console.log('Getting Identity Provider metadata...')

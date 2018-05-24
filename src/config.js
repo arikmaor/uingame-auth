@@ -19,8 +19,10 @@ module.exports = {
   idpMetadataUrl: process.env.IDP_METADATA_URL || 'https://is.remote.education.gov.il/nidp/saml2/metadata',
   logoutUrl: process.env.LOGOUT_URL || 'https://is.remote.education.gov.il/nidp/jsp/logoutSuccess.jsp',
   issuer: process.env.ISSUER || 'http://auth.uingame.co.il',
-  privateKey: process.env.PRIVATE_KEY || 'certs/key.pem',
-  certificate: process.env.CERTIFICATE || 'certs/cert.pem',
+  privateKeyFile: process.env.PRIVATE_KEY || 'certs/key.pem',
+  certificateFile: process.env.CERTIFICATE || 'certs/cert.pem',
+  privateKey: process.env.SAML_PRIVATE_KEY,
+  certificate: process.env.SAML_CERT,
 
   // Test Settings
   // host: '79600464.ngrok.io',
