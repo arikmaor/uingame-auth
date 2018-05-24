@@ -29,10 +29,10 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }))
+  app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail' }))
 
   app.post('/login/callback',
-    passport.authenticate('saml', { failureRedirect: '/login/fail', failureFlash: true }),
+    passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
       if (req.isAuthenticated()) {
         const token = randtoken.generate(16);
