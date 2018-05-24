@@ -109,18 +109,11 @@ async function init() {
 
   app.get('/saml/metadata',
     (req, res, next) => {
-      if (config.certificate) {
+      try {
         res.type('application/xml')
         res.status(200).send(samlStrategy.generateServiceProviderMetadata(config.certificate))
-      } else {
-        fs.readFile(path.resolve(process.cwd(), config.certificateFile), 'utf8', (err, cert) => {
-          if (err) {
-            next(err)
-          } else {
-            res.type('application/xml')
-            res.status(200).send(samlStrategy.generateServiceProviderMetadata(cert))
-          }
-        })
+      } catch(err) {
+        next(err)
       }
     }
   )

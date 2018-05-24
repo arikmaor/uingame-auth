@@ -5,8 +5,6 @@ const SamlStrategy = require('passport-saml').Strategy
 const {parse: parseSamlMetadata} = require('idp-metadata-parser')
 const config = require('./config')
 
-const privateKey = config.privateKey || fs.readFileSync(path.resolve(process.cwd(), config.privateKeyFile), 'utf8')
-
 async function createSamlStartegy() {
   console.log('Getting Identity Provider metadata...')
   const rawMetadata = await rp(config.idpMetadataUrl)
@@ -19,8 +17,8 @@ async function createSamlStartegy() {
     host: config.host,
     entryPoint: metadata.idpSsoTargetUrl,
     issuer: config.issuer,
-    decryptionPvk: privateKey,
-    privateCert: privateKey,
+    decryptionPvk: config.privateKey,
+    privateCert: config.privateKey,
     cert: metadata.idpCert,
     validateInResponseTo: false,
     disableRequestedAuthnContext: true
