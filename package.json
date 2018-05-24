@@ -8,8 +8,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon .",
-    "deploy": "sh ./scripts/deploy.sh"
+    "dev": "nodemon ."
   },
   "author": "Arik Maor <arikmaor@gmail.com>",
   "license": "UNLICENCED",
