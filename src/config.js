@@ -6,7 +6,7 @@ module.exports = {
   corsOrigin: process.env.CORS_ORIGIN || 'https://www.uingame.co.il',
 
   // Auth Redirection
-  successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/scratch-students',
+  successRedirect: process.env.SUCCESS_REDIRECT || 'https://www.uingame.co.il/createsession',
   logoutRedirectUrl: process.env.LOGOUT_REDIRECT || 'https://www.uingame.co.il',
 
   // SAML Settings

@@ -1,14 +1,11 @@
 # UINGame Authenication Server
 
 SAML 2.0 Service Provider
-Authenticates with [education.gov.ip Identity Provider](https://is.remote.education.gov.il/nidp/saml2/metadata)
 
 ## Local Setup
-tools
-1. [git](https://git-scm.com/download/win) (to upload to production)
+1. [git](https://git-scm.com/download) (to upload to production)
 2. [heroku-cli](https://devcenter.heroku.com/articles/heroku-cli) (to upload and manage to production)
-3. `certbot` (for obtaining certificates from [Let's Encrypt](https://letsencrypt.org/))
-4. `nodejs` and `yarn` (for local development)
+3. [nodejs](https://nodejs.org/) and [yarn](https://yarnpkg.com/) (for local development)
 
 ## Uploading to production
 Uploading to heroku is done using git.
@@ -31,19 +28,39 @@ heroku logs --tails
 ```
 It is useful to run this while restarting the server, changing environment variables, etc.
 
-## Getting a real certificate
-1. Install `certbot`
-2. Run `sudo certbot certonly --manual`
-3. Type `auth.uingame.co.il` when the prompt asks for a domain name
-4. You should have a url and a secret string
-Go to [https://dashboard.heroku.com/apps/uingame-auth/settings](here) and add them as environment variables named `ACME_CHALLENGE_URL` and `ACME_CHALLENGE_STRING`
-Add the URL **without** the domain name (ex. '.well-known/acme-challenge/')
-5. Go to the provided url and make sure the string is returned
-6. Click enter back in the terminal
-    1. The certificate is saved in: `/etc/letsencrypt/live/auth.uingame.co.il/fullchain.pem` (it's the first one)
-    2. Private key is saved in: `/etc/letsencrypt/live/auth.uingame.co.il/privkey.pem`
-7. Remove the environment variables from heroku (from step 4)
-8. To renew `sudo certbot renew`
+## Obtaining a certificate
+1. Browse [here](https://www.sslforfree.com/create?domains=auth.uingame.co.il), this is a site that automates certificate creation using [Let's Encrypt](https://letsencrypt.org/)
+    1. Choose "Manual Verification"
+    2. Click "Manually Verify Domain"
+    3. Download the verification file
+2. Browse to [heroku app setting](https://dashboard.heroku.com/apps/uingame-auth/settings)
+    1. Under "Domains and certificates" click "Configure SSL"
+    2. Tick "Remove SSL" and click "Continue". **(note that users will not be able to login until this is switched back)**
+    3. Click "Reveal Config Var" to see the environment variables
+    4. Set `ACME_CHALLENGE_TOKEN` to the varification **file name**
+    5. Set `ACME_CHALLENGE_VALUE` to the varification **file content**
+3. Go back to the first site and click "Download certificates", you will be provided with the certificate and the private key
+4. Go back to heroku and turn automatic SSL back on (it will take a few minutes for users to be able to sign in again)
+
+## Server Configurations
+The server is configured using environment variables that can be found and changed in [heroku app settings](https://dashboard.heroku.com/apps/uingame-auth/settings).
+
+Available settings are:
+
+| Variable | Description | Default Value |
+| --- | --- | --- |
+| PORT | Port for the server to run | set by heroku |
+| REDISTOGO_URL | Redis server url | set by heroku |
+| TOKEN_EXPIRATION | Expiration for the token produced by the server (in seconds) | 300 (5 minutes) |
+| CORS_ORIGIN | Allowed origin for verification endpoint | https://www.uingame.co.il |
+| SUCCESS_REDIRECT | Location to navigate the user after successful login | https://www.uingame.co.il/createsession |
+| LOGOUT_REDIRECT | Location to navigate the user after logging out | https://www.uingame.co.il |
+| IDP_METADATA_URL | URL to obtain IDP metadata | https://lgn.edu.gov.il/nidp/saml2/metadata |
+| LOGOUT_URL | IDP url for logging out | https://lgn.edu.gov.il/nidp/jsp/logoutSuccess.jsp |
+| SAML_PRIVATE_KEY | Private key for signing SAML requests | |
+| SAML_CERT | Public certificate to publish in SAML metadata | |
+| ACME_CHALLENGE_TOKEN | Token for verifing domain ownerwhip using ACME HTTP Challenge | |
+| ACME_CHALLENGE_VALUE | Voken for verifing domain ownerwhip using ACME HTTP Challenge | |
 
 ## Test Profiles:
 <table style="direction: rtl">
