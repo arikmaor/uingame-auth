@@ -1,4 +1,4 @@
-# UINGame Authenication Server
+# UINGame Authenication Server for uingame.co.il - IDM on wix code
 
 SAML 2.0 Service Provider
 
