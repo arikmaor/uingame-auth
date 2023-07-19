@@ -74,11 +74,12 @@ Available settings are:
   </thead>
   <tbody>
     <tr>
-      <td>תלמיד</td>
-      <td>0216636092</td>
+      <td> לדוגמה 
+        תלמיד</td>
+      <td>0226633444</td>
       <td>2933523</td>
-      <td>2253</td>
-      <td>418400 - יסודי ערבי נווה שלום ה/2</td>
+      <td>123456</td>
+      <td>44444 </td>
       <td>
         <pre style="direction: ltr">
 {
@@ -89,14 +90,14 @@ Available settings are:
   "nameQualifier": "https://is.remote.education.gov.il/nidp/saml2/metadata",
   "spNameQualifier": "http://auth.uingame.co.il",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/studentmakbila": "2",
-  "http://schemas.education.gov.il/ws/2015/01/identity/claims/studentmosad": "418400",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": "0216636092",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": "ג'אדי",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname": "טראבין",
+  "http://schemas.education.gov.il/ws/2015/01/identity/claims/studentmosad": "444444",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": "0226633444",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": "פלוני",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname": "אלמוני",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut": "216636092",
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname": "ג'אדי טראבין",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/studentkita": "5",
-  "http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolesyeshuyot": "418400",
+  "http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolesyeshuyot": "444444",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/isstudent": "Yes"
 }
         </pre>
@@ -104,10 +105,10 @@ Available settings are:
     </tr>
     <tr>
       <td>בעל תפקיד</td>
-      <td>0057626053</td>
+      <td>055544333</td>
       <td>1308918</td>
       <td>123qweASD</td>
-      <td>903856 - גן טור</td>
+      <td>123456</td>
       <td>
         <pre style="direction: ltr">
 {
@@ -118,11 +119,11 @@ Available settings are:
   "nameQualifier": "https://is.remote.education.gov.il/nidp/saml2/metadata",
   "spNameQualifier": "http://auth.uingame.co.il",
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": "0057626053",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": "ח'יריה",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname": "ישראלה",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolecomplex": "667[Maarechet_hinuch:99999999]",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname": "עזאיזה",
-  "http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut": "057626053",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname": "ח'יריה עזאיזה",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname": "ישראלה",
+  "http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut": "055544333",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname": "ישראלה",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolessimple": "667[Maarechet_hinuch:99999999]",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolesyeshuyot": "99999999",
   "http://schemas.education.gov.il/ws/2015/01/identity/claims/isstudent": "No"
