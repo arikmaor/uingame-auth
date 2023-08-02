@@ -4,6 +4,9 @@ const querystring = require('query-string')
 const randtoken = require('rand-token')
 const passport = require('passport')
 const cors = require('cors')
+//! temporary
+const rp = require('request-promise')
+const {parse: parseSamlMetadata} = require('idp-metadata-parser')
 
 const createSamlStartegy = require('./samlAuthenticationStrategy')
 const redis = require('./redis')
@@ -102,8 +105,24 @@ async function init() {
     app.get(`/.well-known/acme-challenge/${config.acmeChallengeToken}`, (req, res, next) => {
       res.send(config.acmeChallengeValue)
     })
+    app.get(`/.well-known/pki-validation/${config.acmeChallengeToken}`, (req, res, next) => {
+      res.send(config.acmeChallengeValue)
+    })
   }
 
+  //! temporary
+  app.get('/idp-public-key-certificate-proof', async (req, res, next) => {
+    try {
+      const rawMetadata = await rp({uri: config.idpMetadataUrl, rejectUnauthorized: false})
+      const metadata = await parseSamlMetadata(rawMetadata)
+      console.log('IdP Public Key: ', metadata.idpCert)
+      res.status(200).send('IdP Public Key logged successfully.')
+    } catch (err) {
+      console.error(`Error while getting IdP metadata: ${err}`)
+      res.status(500).send('Internal Server Error')
+    }
+  })
+  
   //general error handler
   app.use(function(err, req, res, next) {
     console.log("Fatal error: " + JSON.stringify(err))
@@ -113,4 +132,5 @@ async function init() {
   app.listen(config.port, () => {
     console.log(`Auth server listening on port ${config.port}...`)
   })
+
 }
