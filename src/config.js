@@ -1,7 +1,7 @@
 module.exports = {
   // Common Settings
   port: process.env.PORT || 8080,
-  redisUrl: process.env.REDISTOGO_URL || '127.0.0.1',
+  redisUrl: process.env.REDISCLOUD_URL || 'redis://p82ac107755c622e093015c4022e6e47305e381829c4de983bc7261246d79ab4f@ec2-54-217-208-106.eu-west-1.compute.amazonaws.com:18180',
   tokenExpiration: process.env.TOKEN_EXPIRATION || 300, // 5 minutes
   corsOrigin: process.env.CORS_ORIGIN || 'https://www.uingame.co.il',
 

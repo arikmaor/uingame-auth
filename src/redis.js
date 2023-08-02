@@ -4,7 +4,19 @@ const redis = require('redis')
 const config = require('./config')
 
 var redisUrl = Url.parse(config.redisUrl);
-const client = redis.createClient(redisUrl.port, redisUrl.hostname)
+//const client = redis.createClient(redisUrl.port, redisUrl.hostname)
+console.log("RED URL", config.redisUrl, "::", redisUrl)
+const client = redis.createClient({
+  url: config.redisUrl,
+  socket: {
+    tls: false,
+    rejectUnauthorized: false
+  }
+});
+console.log("CONFIG",client.options);
+client.on('connect', function() {
+    console.log('-->> CONNECTED');
+});
 
 client.on("error", function (err) {
   console.error("Error in redis client: " + err)
