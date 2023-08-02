@@ -37,7 +37,10 @@ async function init() {
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
+      console.log('log')
       if (req.isAuthenticated()) {
+        console.log('log2')
+        console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
         const keyName = `TOKEN:${token}`
         try {
