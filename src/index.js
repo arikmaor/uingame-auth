@@ -35,17 +35,18 @@ async function init() {
   app.get('/login',
     async (req, res, next) => {
       console.log('log')
+      next();
+    },
+    (req, res, next) => {
       const referer = req.get('Referer');
       console.log('referer 1:', referer);
       req.params.test = 'test';
       req.ref = { referer };
-      next();
-    },
-    (req, res, next) => {
+      req.body.ref = referer;
       console.log('req.params', req.params);
       console.log('req.user', req.user);
-      const referer = req.get('Referer');
       console.log('referer 2:', referer);
+
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
         additionalParams: { RelayState: referer }
