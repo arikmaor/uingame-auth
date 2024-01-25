@@ -25,6 +25,7 @@ async function createSamlStartegy() {
     additionalParams: {'RelayState': 'default'} 
   }, (profile, done, additionalParams, req) => {
     console.log('Additional Params:', additionalParams);
+    console.log('req',req);
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
       id: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut'],

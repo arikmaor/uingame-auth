@@ -35,7 +35,7 @@ async function init() {
   app.get('/login',
   async (req, res, next) => {
     const referer = req.get('Referer');
-    req.session.referer = referer; // Save referer in the session
+    req.session = {referer}; // Save referer in the session
     next();
   },
   passport.authenticate('saml', {
