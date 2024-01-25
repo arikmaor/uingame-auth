@@ -54,10 +54,21 @@ async function init() {
     });
 
   app.post('/login/callback',
+  (req, res, next) => {
+    const referer = req.get('Referer');
+    console.log('referer 1:', referer);
+    req.params.test = 'test';
+    req.ref = { referer };
+    req.body.ref = referer;
+    console.log('req.params', req.params);
+    console.log('req.user', req.user);
+    console.log('referer 2:', referer);
+
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
       additionalParams: { RelayState: referer }
-    })(req, res, next),
+    })(req, res, next);
+  },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
       console.log('req.params 7', req.params);
