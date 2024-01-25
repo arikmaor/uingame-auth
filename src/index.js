@@ -63,7 +63,7 @@ async function init() {
       console.log('req.query 7', req.query);
       const referer = req.body.RelayState;
       console.log('Referer from RelayState:', referer);
-
+      console.log('req:',req,'res:',res)
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
