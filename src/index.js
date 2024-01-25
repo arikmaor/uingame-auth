@@ -40,7 +40,7 @@ async function init() {
     next();
   },
   (req, res, next) => {
-    const referer = req.get('Referer') ?? 'default';
+    const referer = req.get('Referer') || 'default';
     console.log ('referer 2:',referer)
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
