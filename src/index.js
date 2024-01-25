@@ -36,6 +36,7 @@ async function init() {
     console.log('log')
     const referer = req.get('Referer');
     console.log('referer:', referer);
+    next();
   }, passport.authenticate('saml', { failureRedirect: '/login/fail' }))
 
   app.post('/login/callback',
