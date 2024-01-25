@@ -54,13 +54,10 @@ async function init() {
     });
 
   app.post('/login/callback',
-    async (req, res, next) => {
-      console.log('log')
-      console.log('req.params 2', req.params);
-      const referer = req.get('Referer');
-      console.log('referer 3:', referer);
-      next();
-    },
+    passport.authenticate('saml', {
+      failureRedirect: '/login/fail',
+      additionalParams: { RelayState: referer }
+    })(req, res, next),
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
       console.log('req.params 7', req.params);
