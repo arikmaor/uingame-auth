@@ -32,22 +32,35 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login', (req, res, next) => {
-    const referer = req.get('Referer') || 'defaultReferer';
-    const encodedReferer = encodeURIComponent(referer);
-    
+  app.get('/login',
+  async (req, res, next) => {
+    console.log('log')
+    const referer = req.get('Referer');
+    console.log('referer 1:', referer);
+    req.query.test = 'test'
+    next();
+  },
+  (req, res, next) => {
+    console.log('req.query', req.query);
+    const referer = req.get('Referer');
+    console.log ('referer 2:',referer)
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
-      additionalParams: { RelayState: encodedReferer }
+      additionalParams: { RelayState: referer }
     })(req, res, next);
   });
 
-app.post('/login/callback',
-  passport.authenticate('saml', { failureRedirect: '/login/fail' }),
-  async (req, res, next) => {
-    const encodedReferer = req.body.RelayState || 'defaultReferer';
-    const referer = decodeURIComponent(encodedReferer);
-    console.log('Referer:', referer);
+  app.post('/login/callback',
+    async (req, res, next) => {
+      console.log('log')
+      const referer = req.get('Referer');
+      console.log('referer 3:', referer);
+      next();
+    },
+    passport.authenticate('saml', { failureRedirect: '/login/fail' }),
+    async (req, res, next) => {
+      const referer = req.body.RelayState;
+      console.log('Referer from RelayState:', referer);
 
       if (req.isAuthenticated()) {
         console.log('log2')
