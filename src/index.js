@@ -37,33 +37,34 @@ async function init() {
     console.log('log')
     const referer = req.get('Referer');
     console.log('referer 1:', referer);
-    req.query.test = 'test'
+    req.params.test = 'test';
+    req.user.referer = referer;
     next();
   },
   (req, res, next) => {
-    console.log('req.query', req.query);
+    console.log('req.params', req.params);
+    console.log('req.user', req.user);
     const referer = req.get('Referer');
     console.log ('referer 2:',referer)
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
-      additionalParams: { RelayState: referer }
+      RelayState: referer
     })(req, res, next);
   });
 
   app.post('/login/callback',
     async (req, res, next) => {
       console.log('log')
-      console.log('req.query 2', req.query);
+      console.log('req.params 2', req.params);
       const referer = req.get('Referer');
       console.log('referer 3:', referer);
       next();
     },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      console.log('req.query 7', req.query);
+      console.log('req.params 7', req.params);
       const referer = req.body.RelayState;
       console.log('Referer from RelayState:', referer);
-      console.log('req:',req,'res:',res)
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
