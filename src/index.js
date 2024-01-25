@@ -38,7 +38,7 @@ async function init() {
     const referer = req.get('Referer');
     console.log('referer 1:', referer);
     req.params.test = 'test';
-    req.user.referer = referer;
+    req.user = {referer};
     next();
   },
   (req, res, next) => {
