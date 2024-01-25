@@ -9,7 +9,6 @@ async function createSamlStartegy() {
   console.log('Getting Identity Provider metadata...')
   const rawMetadata = await rp({uri: config.idpMetadataUrl, rejectUnauthorized: false})
   const metadata = await parseSamlMetadata(rawMetadata);
-  console.log('metadata',metadata)
   console.log('Identity Provider metadata parsed sucessfully')
   return new SamlStrategy({
     path: '/login/callback',
@@ -23,9 +22,9 @@ async function createSamlStartegy() {
     cert: metadata.idpCert,
     validateInResponseTo: false,
     disableRequestedAuthnContext: true,
-    passReqToCallback: true,
     additionalParams: {'RelayState': 'default'} 
   }, (profile, done, additionalParams, req) => {
+    console.log('Additional Params:', additionalParams);
     console.log('req',req);
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
