@@ -23,8 +23,8 @@ async function createSamlStartegy() {
     validateInResponseTo: false,
     disableRequestedAuthnContext: true,
     passReqToCallback: true,
-  }, (profile, done, req) => {
-    console.log('req')
+  }, (req, profile, done,) => {
+    console.log('req', req)
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
       id: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut'],
