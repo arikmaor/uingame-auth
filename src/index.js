@@ -57,7 +57,7 @@ async function init() {
     },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      const referer = req.body.RelayState || 'default';
+      const referer = req.body.RelayState;
       console.log('Referer from RelayState:', referer);
 
       if (req.isAuthenticated()) {
