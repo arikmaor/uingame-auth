@@ -53,12 +53,14 @@ async function init() {
   app.post('/login/callback',
     async (req, res, next) => {
       console.log('log')
+      console.log('req.query 2', req.query);
       const referer = req.get('Referer');
       console.log('referer 3:', referer);
       next();
     },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
+      console.log('req.query 7', req.query);
       const referer = req.body.RelayState;
       console.log('Referer from RelayState:', referer);
 
