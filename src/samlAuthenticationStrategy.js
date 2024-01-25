@@ -21,8 +21,10 @@ async function createSamlStartegy() {
     privateCert: config.privateKey,
     cert: metadata.idpCert,
     validateInResponseTo: false,
-    disableRequestedAuthnContext: true
-  }, (profile, done) => {
+    disableRequestedAuthnContext: true,
+    passReqToCallback: true,
+  }, (profile, done, req) => {
+    console.log('req')
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
       id: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut'],
