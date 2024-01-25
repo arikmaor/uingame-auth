@@ -38,6 +38,9 @@ async function init() {
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
       console.log('log')
+      const referer = req.get('Referer');
+      console.log('referer:', referer);
+
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
