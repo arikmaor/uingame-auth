@@ -22,8 +22,8 @@ async function createSamlStartegy() {
     cert: metadata.idpCert,
     validateInResponseTo: false,
     disableRequestedAuthnContext: true,
-    additionalParams:{'RelayState':'default'}
-  }, (profile, done, additionalParams) => {
+    additionalParams: {'RelayState': 'default'} 
+  }, (profile, done, additionalParams, req) => {
     console.log('Additional Params:', additionalParams);
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
@@ -37,7 +37,10 @@ async function createSamlStartegy() {
 
 
     return done(null, user)
-  })
+  }, (req, additionalParams) => {
+    additionalParams.RelayState = req.session.referer || 'default';
+    return additionalParams;
+  });
 }
 
 module.exports = createSamlStartegy

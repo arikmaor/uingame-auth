@@ -32,25 +32,23 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login', (req, res, next) => {
-    const referer = encodeURIComponent(req.get('Referer') || 'defaultReferer');
-    
-    // Override the entryPoint to include the custom query parameter
-    const customEntryPoint = `${config.entryPoint}?myReferer=${referer}`;
-  
-    passport.authenticate('saml', {
-      failureRedirect: '/login/fail',
-      additionalParams: { entryPoint: customEntryPoint }
-    })(req, res, next);
-  });
+  app.get('/login',
+  async (req, res, next) => {
+    const referer = req.get('Referer');
+    req.session.referer = referer; // Save referer in the session
+    next();
+  },
+  passport.authenticate('saml', {
+    failureRedirect: '/login/fail',
+    additionalParams: { RelayState: 'customState' } // This will be overwritten in the SAML strategy
+  })
+);
 
-  app.post('/login/callback',
+app.post('/login/callback',
   passport.authenticate('saml', { failureRedirect: '/login/fail' }),
-  async (req, res) => {
-    const referer = decodeURIComponent(req.query.myReferer || 'defaultReferer');
-    console.log('Custom Referer:', referer);
-      console.log('req.params 7', req.params);
-      console.log('Referer:', referer);
+  async (req, res, next) => {
+    const referer = req.body.RelayState;
+    console.log('Referer from RelayState:', referer);
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
