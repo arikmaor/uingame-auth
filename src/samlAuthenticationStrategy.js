@@ -21,7 +21,8 @@ async function createSamlStartegy() {
     privateCert: config.privateKey,
     cert: metadata.idpCert,
     validateInResponseTo: false,
-    disableRequestedAuthnContext: true
+    disableRequestedAuthnContext: true,
+    additionalParams:{'RelayState':'default'}
   }, (profile, done, additionalParams) => {
     console.log('Additional Params:', additionalParams);
     const user = {

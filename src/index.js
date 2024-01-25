@@ -38,7 +38,7 @@ async function init() {
     const referer = req.get('Referer');
     console.log('referer 1:', referer);
     req.params.test = 'test';
-    req.user = {referer};
+    req.user.referer = referer;
     next();
   },
   (req, res, next) => {
@@ -48,7 +48,7 @@ async function init() {
     console.log ('referer 2:',referer)
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
-      RelayState: referer
+      additionalParams: { RelayState: referer }
     })(req, res, next);
   });
 
