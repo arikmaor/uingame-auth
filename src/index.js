@@ -32,21 +32,39 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login', async (req, res, next) => {
-    console.log('log')
-    const referer = req.get('Referer');
-    console.log('referer:', referer);
-    req.body.ref = {referer}
-    next();
-  }, passport.authenticate('saml', { failureRedirect: '/login/fail' }))
-
-  app.post('/login/callback',
-    passport.authenticate('saml', { failureRedirect: '/login/fail' }),
+  app.get('/login',
     async (req, res, next) => {
       console.log('log')
       const referer = req.get('Referer');
-      console.log('referer:', referer);
+      console.log('referer 1:', referer);
+      req.params.test = 'test';
+      req.user = { referer };
+      next();
+    },
+    (req, res, next) => {
+      console.log('req.params', req.params);
+      console.log('req.user', req.user);
+      const referer = req.get('Referer');
+      console.log('referer 2:', referer);
+      passport.authenticate('saml', {
+        failureRedirect: '/login/fail',
+        additionalParams: { RelayState: referer }
+      })(req, res, next);
+    });
 
+  app.post('/login/callback',
+    async (req, res, next) => {
+      console.log('log')
+      console.log('req.params 2', req.params);
+      const referer = req.get('Referer');
+      console.log('referer 3:', referer);
+      next();
+    },
+    passport.authenticate('saml', { failureRedirect: '/login/fail' }),
+    async (req, res, next) => {
+      console.log('req.params 7', req.params);
+      const referer = req.body.RelayState;
+      console.log('Referer from RelayState:', referer);
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
