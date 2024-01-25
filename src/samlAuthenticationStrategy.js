@@ -8,7 +8,8 @@ const config = require('./config')
 async function createSamlStartegy() {
   console.log('Getting Identity Provider metadata...')
   const rawMetadata = await rp({uri: config.idpMetadataUrl, rejectUnauthorized: false})
-  const metadata = await parseSamlMetadata(rawMetadata)
+  const metadata = await parseSamlMetadata(rawMetadata);
+  console.log('metadata',metadata)
   console.log('Identity Provider metadata parsed sucessfully')
   return new SamlStrategy({
     path: '/login/callback',
