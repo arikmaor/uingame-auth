@@ -6,7 +6,7 @@ const passport = require('passport')
 const cors = require('cors')
 //! temporary
 const rp = require('request-promise')
-const { parse: parseSamlMetadata } = require('idp-metadata-parser')
+const {parse: parseSamlMetadata} = require('idp-metadata-parser')
 
 const createSamlStartegy = require('./samlAuthenticationStrategy')
 const redis = require('./redis')
@@ -20,35 +20,24 @@ init().catch(err => {
 
 async function init() {
   const app = express()
-  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.urlencoded({extended: true}))
 
-  passport.serializeUser(function (user, done) {
+  passport.serializeUser(function(user, done) {
     done(null, user);
   });
-  passport.deserializeUser(function (user, done) {
+  passport.deserializeUser(function(user, done) {
     done(null, user);
   });
   const samlStrategy = await createSamlStartegy()
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login',
-  async (req, res, next) => {
-    const referer = req.get('Referer');
-    req.session = {referer}; // Save referer in the session
-    next();
-  },
-  passport.authenticate('saml', {
-    failureRedirect: '/login/fail',
-    additionalParams: { RelayState: 'customState' } // This will be overwritten in the SAML strategy
-  })
-);
+  app.get('/login', passport.authenticate('saml', { failureRedirect: '/login/fail' }))
 
-app.post('/login/callback',
-  passport.authenticate('saml', { failureRedirect: '/login/fail' }),
-  async (req, res, next) => {
-    const referer = req.body.RelayState;
-    console.log('Referer from RelayState:', referer);
+  app.post('/login/callback',
+    passport.authenticate('saml', { failureRedirect: '/login/fail' }),
+    async (req, res, next) => {
+      console.log('log')
       if (req.isAuthenticated()) {
         console.log('log2')
         console.log(req.isAuthenticated());
@@ -57,7 +46,7 @@ app.post('/login/callback',
         try {
           await redis.set(keyName, JSON.stringify(req.user))
           await redis.expire(keyName, config.tokenExpiration)
-          res.redirect(`${config.successRedirect}?${querystring.stringify({ token })}`)
+          res.redirect(`${config.successRedirect}?${querystring.stringify({token})}`)
         } catch (err) {
           console.error(`Error while saving in redis: ${err}`)
           res.redirect('/login/fail')
@@ -73,7 +62,7 @@ app.post('/login/callback',
       origin: config.corsOrigin
     }),
     async (req, res, next) => {
-      const { token } = req.query
+      const {token} = req.query
       if (!token) {
         return res.status(400).send('Bad Request')
       }
@@ -109,7 +98,7 @@ app.post('/login/callback',
       try {
         res.type('application/xml')
         res.status(200).send(samlStrategy.generateServiceProviderMetadata(config.certificate))
-      } catch (err) {
+      } catch(err) {
         next(err)
       }
     }
@@ -127,7 +116,7 @@ app.post('/login/callback',
   //! temporary
   app.get('/idp-public-key-certificate-proof', async (req, res, next) => {
     try {
-      const rawMetadata = await rp({ uri: config.idpMetadataUrl, rejectUnauthorized: false })
+      const rawMetadata = await rp({uri: config.idpMetadataUrl, rejectUnauthorized: false})
       const metadata = await parseSamlMetadata(rawMetadata)
       console.log('IdP Public Key: ', metadata.idpCert)
       res.status(200).send('IdP Public Key logged successfully.')
@@ -136,9 +125,9 @@ app.post('/login/callback',
       res.status(500).send('Internal Server Error')
     }
   })
-
+  
   //general error handler
-  app.use(function (err, req, res, next) {
+  app.use(function(err, req, res, next) {
     console.log("Fatal error: " + JSON.stringify(err))
     next(err)
   })

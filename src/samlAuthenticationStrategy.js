@@ -23,6 +23,7 @@ async function createSamlStartegy() {
     cert: metadata.idpCert,
     validateInResponseTo: false,
     disableRequestedAuthnContext: true,
+    passReqToCallback: true,
     additionalParams: {'RelayState': 'default'} 
   }, (profile, done, additionalParams, req) => {
     console.log('Additional Params:', additionalParams);
