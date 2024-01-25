@@ -32,8 +32,16 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login', (req, res, next) => {
-    const referer = req.get('Referer') || 'default';
+  app.get('/login',
+  async (req, res, next) => {
+    console.log('log')
+    const referer = req.get('Referer');
+    console.log('referer 1:', referer);
+    next();
+  },
+  (req, res, next) => {
+    const referer = req.get('Referer') ?? 'default';
+    console.log ('referer 2:',referer)
     passport.authenticate('saml', {
       failureRedirect: '/login/fail',
       additionalParams: { RelayState: referer }
@@ -44,7 +52,7 @@ async function init() {
     async (req, res, next) => {
       console.log('log')
       const referer = req.get('Referer');
-      console.log('referer:', referer);
+      console.log('referer 3:', referer);
       next();
     },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
