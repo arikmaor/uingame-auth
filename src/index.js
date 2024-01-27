@@ -60,9 +60,6 @@ async function init() {
     async (req, res, next) => {
       const userIP = req.ip;
       console.log('User IP on login:', userIP);
-      console.log('test',req.body.RelayParams);
-      console.log('test',req.body);
-      console.log('req.params 7', req.params);
       const siteInfo = JSON.parse(await redis.get(userIP));
       console.log('original site info: ', siteInfo);
       if (req.isAuthenticated()) {
