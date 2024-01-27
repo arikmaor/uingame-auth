@@ -36,13 +36,9 @@ async function init() {
     async (req, res, next) => {
       let userIP = req.headers['x-forwarded-for'] || req.ip;
       if (userIP.includes(',')) {
-        // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
       }
-      console.log('referrer from request:', req.get('Referer'));
-      console.log('req.query:',req.query)
       let referer = req.get('Referer') != undefined ? req.get('Referer') : (!!req.query.rf != undefined && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
-      console.log('User IP on login:', userIP, referer);
       try {
         await redis.set(userIP, JSON.stringify({referer}));
         await redis.expire(userIP, 100);
@@ -52,8 +48,6 @@ async function init() {
         res.redirect('/login/fail')
       }
       req.query.RelayState = req.params.referer = {referer};
-      console.log('req.query', req.query);
-      console.log('req.params', req.params);
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
         additionalParams: { callbackReferer: referer }
@@ -66,12 +60,9 @@ async function init() {
     async (req, res, next) => {
       let userIP = req.headers['x-forwarded-for'] || req.ip;
       if (userIP.includes(',')) {
-        // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
       }
-      console.log('User IP on login:', userIP);
       const siteInfo = JSON.parse(await redis.get(userIP));
-      console.log('original site info: ', siteInfo);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
@@ -146,19 +137,6 @@ async function init() {
       res.send(config.acmeChallengeValue)
     })
   }
-
-  //! temporary
-  app.get('/idp-public-key-certificate-proof', async (req, res, next) => {
-    try {
-      const rawMetadata = await rp({ uri: config.idpMetadataUrl, rejectUnauthorized: false })
-      const metadata = await parseSamlMetadata(rawMetadata)
-      console.log('IdP Public Key: ', metadata.idpCert)
-      res.status(200).send('IdP Public Key logged successfully.')
-    } catch (err) {
-      console.error(`Error while getting IdP metadata: ${err}`)
-      res.status(500).send('Internal Server Error')
-    }
-  })
 
   //general error handler
   app.use(function (err, req, res, next) {
