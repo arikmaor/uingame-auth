@@ -35,6 +35,7 @@ async function init() {
   app.get('/login',
     (req, res, next) => {
       const referer = req.get('Referer');
+      req.headers = {...req.headers, 'Testing':'test.'}
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
         additionalParams: { callbackReferer: referer }
@@ -45,6 +46,9 @@ async function init() {
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
       console.log('req keys: ',Object.keys(req));
+      console.log('req session: ',req.session);
+      console.log('req query: ',req.query);
+      console.log('req: ',req);
       console.log('Referer:', req.query.callbackReferer);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
