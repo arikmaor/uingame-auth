@@ -35,9 +35,17 @@ async function init() {
   app.get('/login',
     async (req, res, next) => {
       const userIP = req.ip;
+      const referrer = req.get('Referer');
       console.log('User IP on login:', userIP);
-      const referer = req.get('Referer');
-      req.query.RelayState = req.params.referrer = {referer};
+      try {
+        await redis.set(userIP, JSON.stringify({referrer}));
+        await redis.expire(userIP, 30);
+      }
+      catch {
+        console.error(`Error while saving in redis: ${err}`)
+        res.redirect('/login/fail')
+      }
+      req.query.RelayState = req.params.referrer = {referrer};
       console.log('req.query', req.query);
       console.log('req.params', req.params);
       passport.authenticate('saml', {
@@ -55,6 +63,8 @@ async function init() {
       console.log('test',req.body.RelayParams);
       console.log('test',req.body);
       console.log('req.params 7', req.params);
+      const siteInfo = JSON.parse(await redis.get(userIP));
+      console.log('original site info: ', siteInfo);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
