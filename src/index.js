@@ -32,21 +32,21 @@ async function init() {
   passport.use(samlStrategy)
   app.use(passport.initialize())
 
-  app.get('/login',
+  app.get('/login:referrer',
     async (req, res, next) => {
       const referer = req.get('Referer');
+      req.query.RelayState = req.params.referrer;
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
         additionalParams: { callbackReferer: referer }
       })(req, res, next);
-    }, async (req, res, next) => {
-      console.log('testing123');
     }
   );
 
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
+      console.log('test',req.body.RelayParams);
       console.log('req.params 7', req.params);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
