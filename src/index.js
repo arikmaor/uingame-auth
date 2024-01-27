@@ -34,7 +34,7 @@ async function init() {
 
   app.get('/login',
     async (req, res, next) => {
-      let userIP = req.headers['x-forwarded-for'];
+      let userIP = req.headers['x-forwarded-for'] || req.ip;
       if (userIP.includes(',')) {
         // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
@@ -62,7 +62,7 @@ async function init() {
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      let userIP = req.headers['x-forwarded-for'];
+      let userIP = req.headers['x-forwarded-for'] || req.ip;
       if (userIP.includes(',')) {
         // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
@@ -77,7 +77,7 @@ async function init() {
         try {
           await redis.set(keyName, JSON.stringify(req.user))
           await redis.expire(keyName, config.tokenExpiration)
-          res.redirect(`${siteInfo.referer+'createsession'}?${querystring.stringify({ token })}`)
+          res.redirect(`${siteInfo.referer+'/createsession'}?${querystring.stringify({ token })}`)
         } catch (err) {
           console.error(`Error while saving in redis: ${err}`)
           res.redirect('/login/fail')
