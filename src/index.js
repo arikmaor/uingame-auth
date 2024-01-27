@@ -41,7 +41,7 @@ async function init() {
       }
       console.log('referrer from request:', req.get('Referer'));
       console.log('req.query:',req.query)
-      let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://www.uingame.co.il/' : 'https://www.uingame.co.il/' ;
+      let referer = req.get('Referer') != undefined ? req.get('Referer') : (!!req.query.rf != undefined && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
       console.log('User IP on login:', userIP, referer);
       try {
         await redis.set(userIP, JSON.stringify({referer}));
