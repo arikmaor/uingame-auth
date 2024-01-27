@@ -92,7 +92,7 @@ async function init() {
 
   app.get('/login/verify',
     cors({
-      origin: config.corsOrigin
+      origin: [config.corsOrigin,'https://space.uingame.co.il']
     }),
     async (req, res, next) => {
       const { token } = req.query
