@@ -22,7 +22,7 @@ async function createSamlStartegy() {
     cert: metadata.idpCert,
     validateInResponseTo: false,
     disableRequestedAuthnContext: true,
-    passReqToCallback: true,
+    passReqToCallback: true
   }, (req, profile, done,) => {
     const user = {
       displayName: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/displayname'],
