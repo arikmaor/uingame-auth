@@ -35,17 +35,17 @@ async function init() {
   app.get('/login',
     async (req, res, next) => {
       const userIP = req.ip;
-      const referrer = req.get('Referer');
+      const referer = req.get('Referer');
       console.log('User IP on login:', userIP);
       try {
-        await redis.set(userIP, JSON.stringify({referrer}));
+        await redis.set(userIP, JSON.stringify({referer}));
         await redis.expire(userIP, 30);
       }
       catch (err) {
         console.error(`Error while saving in redis: ${err}`)
         res.redirect('/login/fail')
       }
-      req.query.RelayState = req.params.referrer = {referrer};
+      req.query.RelayState = req.params.referer = {referer};
       console.log('req.query', req.query);
       console.log('req.params', req.params);
       passport.authenticate('saml', {
