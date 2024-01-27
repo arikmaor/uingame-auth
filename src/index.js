@@ -10,7 +10,7 @@ const { parse: parseSamlMetadata } = require('idp-metadata-parser')
 
 const createSamlStartegy = require('./samlAuthenticationStrategy')
 const redis = require('./redis')
-const config = require('./config')
+const config = require('./config');
 
 
 init().catch(err => {
@@ -33,41 +33,20 @@ async function init() {
   app.use(passport.initialize())
 
   app.get('/login',
-    async (req, res, next) => {
-      console.log('log')
-      next();
-    },
     (req, res, next) => {
       const referer = req.get('Referer');
-      console.log('referer 1:', referer);
-      req.params.test = 'test';
-      req.ref = { referer };
-      req.body.ref = referer;
-      console.log('req.params', req.params);
-      console.log('req.user', req.user);
-      console.log('referer 2:', referer);
-      req.body.RelayState = 'testing'
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
-        additionalParams: { RelayState: referer }
+        additionalParams: { callbackReferer: referer }
       })({...req,RelayState:'testing2'}, res, next);
     });
 
   app.post('/login/callback',
-    async (req, res, next) => {
-      console.log('log')
-      console.log('req.params 2', req.params);
-      const referer = req.get('Referer');
-      console.log('referer 3:', referer);
-      next();
-    },
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      console.log('req.params 7', req.params);
-      const referer = req.body.RelayState;
-      console.log('Referer from RelayState:', referer);
+      console.log('req keys: ',Object.keys(req));
+      console.log('Referer:', req.query.callbackReferer);
       if (req.isAuthenticated()) {
-        console.log('log2')
         console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
         const keyName = `TOKEN:${token}`
