@@ -33,23 +33,30 @@ async function init() {
   app.use(passport.initialize())
 
   app.get('/login',
-    (req, res, next) => {
-      const referer = req.get('Referer');
-      req.headers = {...req.headers, 'Testing':'test.'}
-      passport.authenticate('saml', {
-        failureRedirect: '/login/fail',
-        additionalParams: { callbackReferer: referer }
-      })({...req,RelayState:'testing2'}, res, next);
-    });
+  (req, res, next) => {
+    const referer = req.get('Referer');
+    passport.authenticate('saml', (err, user, info) => {
+      if (err) return next(err);
+      if (!user) return res.redirect('/login/fail');
+
+      // Store the referer in a way that can be accessed in the callback route
+      req.tempReferer = referer;
+      res.tempReferer = referer;
+
+      // Continue with the authentication process
+      req.logIn(user, function(err) {
+        if (err) return next(err);
+        // Redirect to the callback URL, you might append a unique identifier if needed
+        return res.redirect('/login/callback');
+      });
+    })(req, res, next);
+  });
 
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      console.log('req keys: ',Object.keys(req));
-      console.log('req session: ',req.session);
-      console.log('req query: ',req.query);
-      console.log('req: ',req);
-      console.log('Referer:', req.query.callbackReferer);
+      const referer = req.tempReferer;
+      console.log('Referer:', referer);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
