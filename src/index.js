@@ -33,21 +33,26 @@ async function init() {
   app.use(passport.initialize())
 
   app.get('/login',
-    (req, res, next) => {
-      const referer = req.get('Referer');
-      console.log(referer)
-      passport.authenticate('saml', {
-        failureRedirect: '/login/fail',
-        additionalParams: { callbackReferer: referer }
-      })({...req,RelayState:'testing2'}, res, next);
-    },async (req, res, next) => {
-      console.log('testing123');
-      console.log('req:', req.user);
-    });
-
+  (req, res, next) => {
+    const referer = req.get('Referer');
+    passport.authenticate('saml', (err, user, info) => {
+      console.log('firsttest')
+      console.log(user, req, info)
+      if (err) return next(err);
+      if (!user) return res.redirect('/login/fail');
+      // Continue with the authentication process
+      req.logIn(user, function(err) {
+        if (err) return next(err);
+        console.log('user')
+        console.log(user, req, info)
+        return res.redirect(`/login/smolback?referer=${encodeURIComponent(referer)}`);
+      });
+    })(req, res, next);
+  });
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
+      console.log('req.params 7', req.params);
       if (req.isAuthenticated()) {
         console.log(req.isAuthenticated());
         const token = randtoken.generate(16);
