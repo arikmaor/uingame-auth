@@ -46,11 +46,11 @@ async function init() {
       console.log('req.params', req.params);
       console.log('req.user', req.user);
       console.log('referer 2:', referer);
-
+      req.body.RelayState = 'testing'
       passport.authenticate('saml', {
         failureRedirect: '/login/fail',
         additionalParams: { RelayState: referer }
-      })(req, res, next);
+      })({...req,RelayState:'testing2'}, res, next);
     });
 
   app.post('/login/callback',
