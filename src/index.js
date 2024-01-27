@@ -34,15 +34,14 @@ async function init() {
 
   app.get('/login',
     async (req, res, next) => {
+      let userIP = req.headers['x-forwarded-for'] || req.ip;
+      if (userIP.includes(',')) {
+        // In case there are multiple IP addresses in the X-Forwarded-For header
+        userIP = userIP.split(',')[0].trim();
+      }
+      let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
+      console.log('User IP on login:', userIP, referer);
       try {
-        let userIP = req.headers['x-forwarded-for'] || req.ip;
-        if (userIP.includes(',')) {
-          // In case there are multiple IP addresses in the X-Forwarded-For header
-          userIP = userIP.split(',')[0].trim();
-        }
-        let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
-
-        console.log('User IP on login:', userIP, referer);
         await redis.set(userIP, JSON.stringify({referer}));
         await redis.expire(userIP, 100);
       }
