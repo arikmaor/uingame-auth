@@ -38,14 +38,14 @@ async function init() {
     passport.authenticate('saml', (err, user, info) => {
       if (err) return next(err);
       if (!user) return res.redirect('/login/fail');
-
       // Store the referer in a way that can be accessed in the callback route
       console.log('user: : : ', user);
       // Continue with the authentication process
       req.logIn(user, function(err) {
         if (err) return next(err);
+        console.log('test123')
         // Redirect to the callback URL, you might append a unique identifier if needed
-        return res.redirect('/login/callback');
+        return res.redirect('/login/callback?queryTest=1234');
       });
     })(req, res, next);
   });
