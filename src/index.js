@@ -43,7 +43,7 @@ async function init() {
       console.log('User IP on login:', userIP);
       try {
         await redis.set(userIP, JSON.stringify({referer}));
-        await redis.expire(userIP, 30);
+        await redis.expire(userIP, 100);
       }
       catch (err) {
         console.error(`Error while saving in redis: ${err}`)
@@ -77,7 +77,7 @@ async function init() {
         try {
           await redis.set(keyName, JSON.stringify(req.user))
           await redis.expire(keyName, config.tokenExpiration)
-          res.redirect(`${config.successRedirect}?${querystring.stringify({ token })}`)
+          res.redirect(`${siteInfo.referer+'/createsession'}?${querystring.stringify({ token })}`)
         } catch (err) {
           console.error(`Error while saving in redis: ${err}`)
           res.redirect('/login/fail')
