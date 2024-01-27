@@ -122,7 +122,8 @@ async function init() {
 
   app.get('/logout',
     (req, res) => {
-      res.redirect(`${config.logoutUrl}?logoutURL=${config.logoutRedirectUrl}`)
+      let referer = req.get('Referer') != undefined ? req.get('Referer') : (!!req.query.rf != undefined && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
+      res.redirect(`${config.logoutUrl}?logoutURL=${referer}`)
     }
   )
 
