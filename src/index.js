@@ -77,7 +77,7 @@ async function init() {
         try {
           await redis.set(keyName, JSON.stringify(req.user))
           await redis.expire(keyName, config.tokenExpiration)
-          res.redirect(`${siteInfo.referer+'/createsession'}?${querystring.stringify({ token })}`)
+          res.redirect(`${siteInfo.referer+'createsession'}?${querystring.stringify({ token })}`)
         } catch (err) {
           console.error(`Error while saving in redis: ${err}`)
           res.redirect('/login/fail')
