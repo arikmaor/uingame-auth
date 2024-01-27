@@ -40,9 +40,7 @@ async function init() {
       if (!user) return res.redirect('/login/fail');
 
       // Store the referer in a way that can be accessed in the callback route
-      req.tempReferer = referer;
-      res.tempReferer = referer;
-
+      console.log('user: : : ', user);
       // Continue with the authentication process
       req.logIn(user, function(err) {
         if (err) return next(err);
