@@ -41,7 +41,7 @@ async function init() {
       let referer = req.get('Referer') != undefined ? req.get('Referer') : (!!req.query.rf != undefined && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
       try {
         await redis.set(userIP, JSON.stringify({referer}));
-        await redis.expire(userIP, 100);
+        await redis.expire(userIP, 3600 * 24);
       }
       catch (err) {
         console.error(`Error while saving in redis: ${err}`)
@@ -70,6 +70,7 @@ async function init() {
         try {
           await redis.set(keyName, JSON.stringify(req.user))
           await redis.expire(keyName, config.tokenExpiration)
+          await redis.expire(userIP, 1);
           res.redirect(`${siteInfo.referer+'/createsession'}?${querystring.stringify({ token })}`)
         } catch (err) {
           console.error(`Error while saving in redis: ${err}`)
