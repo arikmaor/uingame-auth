@@ -41,7 +41,7 @@ async function init() {
         await redis.set(userIP, JSON.stringify({referrer}));
         await redis.expire(userIP, 30);
       }
-      catch {
+      catch (err) {
         console.error(`Error while saving in redis: ${err}`)
         res.redirect('/login/fail')
       }
