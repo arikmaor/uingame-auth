@@ -34,6 +34,8 @@ async function init() {
 
   app.get('/login',
     async (req, res, next) => {
+      const userIP = req.ip;
+      console.log('User IP on login:', userIP);
       const referer = req.get('Referer');
       req.query.RelayState = req.params.referrer = {referer};
       console.log('req.query', req.query);
@@ -48,6 +50,8 @@ async function init() {
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
+      const userIP = req.ip;
+      console.log('User IP on login:', userIP);
       console.log('test',req.body.RelayParams);
       console.log('test',req.body);
       console.log('req.params 7', req.params);
