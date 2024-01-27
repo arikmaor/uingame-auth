@@ -34,7 +34,11 @@ async function init() {
 
   app.get('/login',
     async (req, res, next) => {
-      const userIP = req.ip;
+      let userIP = req.headers['x-forwarded-for'];
+      if (userIP.includes(',')) {
+        // In case there are multiple IP addresses in the X-Forwarded-For header
+        userIP = userIP.split(',')[0].trim();
+      }
       const referer = req.get('Referer');
       console.log('User IP on login:', userIP);
       try {
@@ -58,7 +62,11 @@ async function init() {
   app.post('/login/callback',
     passport.authenticate('saml', { failureRedirect: '/login/fail' }),
     async (req, res, next) => {
-      const userIP = req.ip;
+      let userIP = req.headers['x-forwarded-for'];
+      if (userIP.includes(',')) {
+        // In case there are multiple IP addresses in the X-Forwarded-For header
+        userIP = userIP.split(',')[0].trim();
+      }
       console.log('User IP on login:', userIP);
       const siteInfo = JSON.parse(await redis.get(userIP));
       console.log('original site info: ', siteInfo);
