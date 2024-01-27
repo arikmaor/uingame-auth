@@ -39,6 +39,8 @@ async function init() {
         // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
       }
+      console.log('referrer from request:', req.get('Referer'));
+      console.log('req.query:',req.query)
       let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://www.uingame.co.il/' : 'https://www.uingame.co.il/' ;
       console.log('User IP on login:', userIP, referer);
       try {
