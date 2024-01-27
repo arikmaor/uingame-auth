@@ -39,7 +39,7 @@ async function init() {
         // In case there are multiple IP addresses in the X-Forwarded-For header
         userIP = userIP.split(',')[0].trim();
       }
-      let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://space.uingame.co.il/' : 'https://www.uingame.co.il/' ;
+      let referer = req.get('Referer') || (!!req.query.rf && req.query.rf == 'space') ? 'https://www.uingame.co.il/' : 'https://www.uingame.co.il/' ;
       console.log('User IP on login:', userIP, referer);
       try {
         await redis.set(userIP, JSON.stringify({referer}));
