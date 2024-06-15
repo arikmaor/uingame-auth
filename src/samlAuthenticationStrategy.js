@@ -30,6 +30,7 @@ async function createSamlStartegy() {
       id: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/zehut'],
       mosad: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/orgrolesyeshuyot'],
       mosad_2: profile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/shibutznosaf'],
+      mosad_3: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/studentmosad'],
       isStudent: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/isstudent'] === 'Yes',
       kita: profile['http://schemas.education.gov.il/ws/2015/01/identity/claims/studentkita']
     }
